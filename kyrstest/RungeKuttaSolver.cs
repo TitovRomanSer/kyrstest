@@ -147,15 +147,15 @@ namespace DifferentialEquationSolver
             else
             {
                 // Увеличиваем шаг, если значение слишком маленькое
-                if (step.CompareTo(EDecimal.FromInt32(3)) <= 0)
+                if (step.CompareTo(EDecimal.FromString("0.0001")) <= 0)
                 {
                     step = step.Add(EDecimal.FromString("0.1")); // Увеличиваем шаг на 0.1, если он ≤ 3
                     Log($"Шаг увеличен на 0.1 до {step} для улучшения вычислений.");
                 }
                 else
                 {
-                    step = step.Multiply(EDecimal.FromString("1.2")); // Увеличиваем шаг на 20%, если он > 3
-                    Log($"Шаг увеличен на 20% до {step} для улучшения вычислений.");
+                    step = step.Multiply(EDecimal.FromString("0.1")); // Увеличиваем шаг на 0.1, если он > 3
+                    Log($"Шаг увеличен на 0.1 до {step} для улучшения вычислений.");
                 }
                 stepAdjusted = true;
             }
