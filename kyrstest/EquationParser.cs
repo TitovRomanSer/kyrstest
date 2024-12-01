@@ -126,7 +126,32 @@ namespace DifferentialEquationSolver
             try
             {
                 expression = expression.Replace(" ", "");
+                if (expression.StartsWith("(") && expression.EndsWith(")") && IsBalancedParentheses(expression))
 
+                {
+                    return Evaluate(expression.Substring(1, expression.Length - 2));
+                }
+                expression = expression.Replace(" ", "");
+
+                // Обработка отрицательных чисел
+                if (expression.StartsWith("-"))
+                {
+                    return Evaluate(expression.Substring(1)).Negate(); // Если число отрицательное, инвертируем его знак
+                }
+                if (expression.Contains("^"))
+                {
+                    var parts = SplitExpression(expression, '^');
+
+                    // Проверка: если основание отрицательное и степень дробная, выбрасываем ошибку
+                    var baseValue = Evaluate(parts[0]);
+                    var exponent = Evaluate(parts[1]);
+
+                    if (baseValue.Sign < 0 && !exponent.IsInteger())
+                    {
+                        throw new InvalidOperationException("Невозможно возвести отрицательное число в дробную степень.");
+                    }
+                    return baseValue.Pow(exponent.ToInt32Checked());
+                }
                 // Математические операции
                 if (expression.Contains("+"))
                 {
@@ -200,15 +225,29 @@ namespace DifferentialEquationSolver
         private EDecimal CalculateExp(EDecimal x) => EDecimal.FromDouble(Math.Exp(x.ToDouble()));
 
         // Вспомогательные методы
+        private bool IsBalancedParentheses(string expression)
+        {
+            int balance = 0;
+            foreach (char ch in expression)
+            {
+                if (ch == '(') balance++;
+                if (ch == ')') balance--;
+                if (balance < 0) return false; // Закрывающая скобка раньше открывающей
+            }
+            return balance == 0;
+        }
+
         private string[] SplitExpression(string expression, char op)
         {
             var parts = new List<string>();
             int depth = 0, start = 0;
+
             for (int i = 0; i < expression.Length; i++)
             {
                 if (expression[i] == '(') depth++;
                 if (expression[i] == ')') depth--;
-                if (expression[i] == op && depth == 0)
+
+                if (expression[i] == op && depth == 0) // Разделяем только на верхнем уровне
                 {
                     parts.Add(expression.Substring(start, i - start));
                     start = i + 1;
@@ -218,6 +257,7 @@ namespace DifferentialEquationSolver
             parts.Add(expression.Substring(start));
             return parts.ToArray();
         }
+
 
         private string ExtractArgument(string expression, string functionName)
         {

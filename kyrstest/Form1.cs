@@ -42,7 +42,12 @@ namespace DifferentialEquationSolver
                     UIManager.ShowError("Конечное время должно быть положительным числом.");
                     return;
                 }
-
+                // Добавление проверки на максимальное значение времени окончания (не более 1000)
+                if (endTime.CompareTo(EDecimal.FromInt32(1000)) > 0)
+                {
+                    UIManager.ShowError("Конечное время не должно превышать 1000.");
+                    return;
+                }
                 // Парсинг системы уравнений
                 var parser = new EquationParser();
                 List<Func<EDecimal, EDecimal[], EDecimal>> equations;
@@ -234,7 +239,7 @@ namespace DifferentialEquationSolver
             string printText = resultBox.Text;
             try
             {
-                e.Graphics.DrawString(printText, new Font("Arial", 12), Brushes.Black, 100, 100);
+                e.Graphics.DrawString(printText, new Font("Arial", 14), Brushes.Black, 100, 100);
             }
             catch (Exception ex)
             {

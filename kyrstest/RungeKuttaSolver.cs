@@ -8,7 +8,7 @@ namespace DifferentialEquationSolver
     public class RungeKuttaSolver
     {
         private const int MaxAdjustmentAttempts = 10;
-        private static readonly EDecimal MinStep = EDecimal.FromString("0.00001");
+        private static readonly EDecimal MinStep = EDecimal.FromString("1");
         private static readonly EDecimal MaxStep = EDecimal.FromString("100");
         // Решение ДУ первого порядка
         public List<EDecimal[]> SolveFirstOrder(EquationSystem system)
@@ -129,38 +129,25 @@ namespace DifferentialEquationSolver
         {
             bool stepAdjusted = false;
 
+            // Проверка на ошибку, если значение NaN или Infinity
             if (errorMessage.Contains("NaN") || errorMessage.Contains("Infinity"))
             {
-                // Уменьшаем шаг, если значение некорректное
-                if (step.CompareTo(EDecimal.FromInt32(3)) > 0)
+                // Если шаг равен 1, увеличиваем его на 0.1
+                if (step.CompareTo(EDecimal.FromInt32(1)) == 0)
                 {
-                    step = step.Divide(2); // Уменьшаем шаг на 50%, если он больше 3
-                    Log($"Шаг уменьшен на 50% до {step} для предотвращения ошибок.");
+                    step = step.Add(EDecimal.FromString("0.1"));
+                    Log($"Шаг увеличен на 0.1, новый шаг: {step}.");
                 }
-                else
+                else if (step.CompareTo(EDecimal.FromInt32(1)) > 0) // Если шаг больше 1
                 {
-                    step = step.Subtract(EDecimal.FromString("0.1")); // Уменьшаем шаг на 0.1, если он ≤ 3
-                    Log($"Шаг уменьшен на 0.1 до {step} для предотвращения ошибок.");
+                    step = step.Add(EDecimal.FromString("0.1"));
+                    Log($"Шаг увеличен на 0.1, новый шаг: {step}.");
                 }
-                stepAdjusted = true;
-            }
-            else
-            {
-                // Увеличиваем шаг, если значение слишком маленькое
-                if (step.CompareTo(EDecimal.FromString("0.0001")) <= 0)
-                {
-                    step = step.Add(EDecimal.FromString("0.1")); // Увеличиваем шаг на 0.1, если он ≤ 3
-                    Log($"Шаг увеличен на 0.1 до {step} для улучшения вычислений.");
-                }
-                else
-                {
-                    step = step.Multiply(EDecimal.FromString("0.1")); // Увеличиваем шаг на 0.1, если он > 3
-                    Log($"Шаг увеличен на 0.1 до {step} для улучшения вычислений.");
-                }
+
                 stepAdjusted = true;
             }
 
-            // Ограничиваем шаг в пределах допустимых значений
+            // Ограничиваем шаг в пределах от 1 до 10
             if (step.CompareTo(MinStep) < 0)
             {
                 step = MinStep;
@@ -174,14 +161,12 @@ namespace DifferentialEquationSolver
                 stepAdjusted = true;
             }
 
-            // Уведомляем пользователя о корректировке шага
+            // Уведомление об изменении шага
             if (stepAdjusted)
             {
                 UIManager.ShowInfo($"Шаг интегрирования был скорректирован до {step} для обеспечения корректного выполнения расчёта.");
             }
         }
-
-
 
         // Шаг метода Рунге-Кутты для первого порядка
         private EDecimal[] RungeKuttaStepFirstOrder(List<Func<EDecimal, EDecimal[], EDecimal>> equations, EDecimal t, EDecimal[] y, EDecimal h)
