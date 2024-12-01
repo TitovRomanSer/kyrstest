@@ -14,13 +14,6 @@
       <FileName>EquationParser.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DifferentialEquationSolver.MathEvaluator">
-    <Position X="0.5" Y="2.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAAQAAAAAAhQAAAAAAAgAAgAQAgAAAAA=</HashCode>
-      <FileName>EquationParser.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="DifferentialEquationSolver.EquationSystem">
     <Position X="5" Y="0.5" Width="1.5" />
     <Compartments>
@@ -68,6 +61,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAABAQAAAAAAAAAAAAAACAAAAAAIAA=</HashCode>
       <FileName>UIManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DifferentialEquationSolver.MathEvaluator">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAIAAAQAAAAAAhQAAAAAAAgAAgCQAgAAAAA=</HashCode>
+      <FileName>EquationParser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

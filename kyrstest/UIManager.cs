@@ -29,8 +29,6 @@ public static class UIManager
             t = t.Add(stepSize); // Увеличиваем время на шаг
         }
     }
-
-
     public static void ShowError(string errorMessage)
     {
         MessageBox.Show(errorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
