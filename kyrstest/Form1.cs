@@ -12,6 +12,75 @@ namespace DifferentialEquationSolver
         public MainForm()
         {
             InitializeComponent();
+            stepSizeBox.LostFocus += (sender, e) => ValidateStepSize();
+            initialConditionsBox.LostFocus += (sender, e) => ValidateInitialConditions();
+             
+            equationsBox.LostFocus += (sender, e) => ValidateEquations();
+            endTimeBox.LostFocus += (sender, e) => ValidateEndTime();
+        }
+        private void ValidateStepSize()
+        {
+            if (string.IsNullOrWhiteSpace(stepSizeBox.Text)) return; // Пропускаем проверку, если поле пустое
+
+            if (!TryParseEDecimal(stepSizeBox.Text.Replace(",", "."), out EDecimal stepSize) || stepSize.CompareTo(EDecimal.Zero) <= 0)
+            {
+                UIManager.ShowError("Шаг интегрирования должен быть положительным числом.");
+                stepSizeBox.Focus(); // Вернуть фокус в поле с ошибкой
+            }
+        }
+
+        // Метод проверки корректности начальных условий
+        private void ValidateInitialConditions()
+        {
+            if (string.IsNullOrWhiteSpace(initialConditionsBox.Text)) return; // Пропускаем проверку, если поле пустое
+
+            try
+            {
+                var parser = new EquationParser();
+                parser.ParseInitialConditions(initialConditionsBox.Text); // Проверка парсинга
+            }
+            catch (Exception ex)
+            {
+                UIManager.ShowError("Начальные условия некорректны: " + ex.Message);
+                initialConditionsBox.Focus(); // Вернуть фокус в поле с ошибкой
+            }
+        }
+
+        // Метод проверки корректности системы уравнений
+        private void ValidateEquations()
+        {
+            if (string.IsNullOrWhiteSpace(equationsBox.Text)) return; // Пропускаем проверку, если поле пустое
+
+            try
+            {
+                var parser = new EquationParser();
+                parser.ParseEquations(equationsBox.Text); // Проверка парсинга
+            }
+            catch (Exception ex)
+            {
+                UIManager.ShowError("Система уравнений некорректна: " + ex.Message);
+                equationsBox.Focus(); // Вернуть фокус в поле с ошибкой
+            }
+        }
+
+        // Метод проверки корректности времени окончания
+        private void ValidateEndTime()
+        {
+            if (string.IsNullOrWhiteSpace(endTimeBox.Text)) return; // Пропускаем проверку, если поле пустое
+
+            if (int.TryParse(endTimeBox.Text, out int endTime))
+            {
+                if (endTime > 100)
+                {
+                    UIManager.ShowError("Время окончания не может быть больше 100.");
+                    endTimeBox.Focus(); // Вернуть фокус в поле с ошибкой
+                }
+            }
+            else
+            {
+                UIManager.ShowError("Пожалуйста, введите корректное число для времени окончания.");
+                endTimeBox.Focus(); // Вернуть фокус в поле с ошибкой
+            }
         }
 
         private void SolveButton_Click(object sender, EventArgs e)
@@ -19,10 +88,10 @@ namespace DifferentialEquationSolver
             try
             {
                 // Проверка на заполнение всех полей
-                if (string.IsNullOrWhiteSpace(stepSizeBox.Text) ||
-                    string.IsNullOrWhiteSpace(endTimeBox.Text) ||
-                    string.IsNullOrWhiteSpace(initialConditionsBox.Text) ||
-                    string.IsNullOrWhiteSpace(equationsBox.Text) ||
+                if (//string.IsNullOrWhiteSpace(stepSizeBox.Text) ||
+                    //string.IsNullOrWhiteSpace(endTimeBox.Text) ||
+                    //string.IsNullOrWhiteSpace(initialConditionsBox.Text) ||
+                   string.IsNullOrWhiteSpace(equationsBox.Text) ||
                     (!firstOrderRadioButton.Checked && !secondOrderRadioButton.Checked))
                 {
                     UIManager.ShowError("Все поля должны быть заполнены для выполнения расчёта.");
