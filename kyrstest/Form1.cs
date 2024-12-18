@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Text;
 using System.Windows.Forms;
 using PeterO.Numbers;
 
@@ -28,6 +29,53 @@ namespace DifferentialEquationSolver
                 stepSizeBox.Focus(); // Вернуть фокус в поле с ошибкой
             }
         }
+        private Random random = new Random();
+
+        private void GenerateRandomEquationsButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int numberOfEquations = 10000; // Количество уравнений и начальных условий
+                Random random = new Random();
+
+                // Генерация начальных условий и уравнений
+                var initialConditions = new List<string>();
+                var equations = new List<string>();
+
+                for (int i = 1; i <= numberOfEquations; i++)
+                {
+                    // Случайное целое число для начальных условий
+                    int initialValue = random.Next(-1000, 1000);
+                    string formattedInitialValue = initialValue < 0 ? $"({initialValue})" : $"{initialValue}";
+                    initialConditions.Add($"y{i}(0)={formattedInitialValue}");
+
+                    // Случайное целое число для уравнений
+                    int equationValue = random.Next(-1000, 1000);
+                    string formattedEquationValue = equationValue < 0 ? $"({equationValue})" : $"{equationValue}";
+                    equations.Add($"y'{i}={formattedEquationValue}");
+                }
+
+                // Объединение начальных условий и уравнений
+                string initialConditionsString = string.Join(", ", initialConditions);
+                string equationsString = string.Join("; ", equations);
+
+                // Вывод начальных условий и уравнений на форму
+                initialConditionsBox.Text = initialConditionsString;
+                equationsBox.Text = equationsString;
+
+                MessageBox.Show("Случайные уравнения и начальные условия успешно сгенерированы!", "Генерация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                UIManager.ShowError("Произошла ошибка при генерации уравнений: " + ex.Message);
+            }
+        }
+
+
+
+
+
+
 
         // Метод проверки корректности начальных условий
         private void ValidateInitialConditions()

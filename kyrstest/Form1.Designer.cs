@@ -21,6 +21,7 @@
         private System.Windows.Forms.RadioButton firstOrderRadioButton;
         private System.Windows.Forms.RadioButton secondOrderRadioButton;
         private System.Windows.Forms.Label orderLabel;
+        private System.Windows.Forms.Button generateButton;
 
         protected override void Dispose(bool disposing)
         {
@@ -49,6 +50,7 @@
             this.firstOrderRadioButton = new System.Windows.Forms.RadioButton();
             this.secondOrderRadioButton = new System.Windows.Forms.RadioButton();
             this.orderLabel = new System.Windows.Forms.Label();
+            this.generateButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loadButton
@@ -196,9 +198,20 @@
             this.orderLabel.TabIndex = 15;
             this.orderLabel.Text = "Выберите порядок ДУ:";
             // 
+            // generateButton
+            // 
+            this.generateButton.Location = new System.Drawing.Point(382, 456);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(150, 30);
+            this.generateButton.TabIndex = 0;
+            this.generateButton.Text = "Сгенерировать";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.GenerateRandomEquationsButton_Click);
+            // 
             // MainForm
             // 
             this.ClientSize = new System.Drawing.Size(626, 737);
+            this.Controls.Add(this.generateButton);
             this.Controls.Add(this.printButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.solveButton);
