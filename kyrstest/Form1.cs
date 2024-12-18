@@ -44,15 +44,22 @@ namespace DifferentialEquationSolver
 
                 for (int i = 1; i <= numberOfEquations; i++)
                 {
-                    // Случайное целое число для начальных условий
-                    int initialValue = random.Next(-1000, 1000);
+                    // Генерация случайного значения для начальных условий
+                    int initialValue = random.Next(-100, 100);
                     string formattedInitialValue = initialValue < 0 ? $"({initialValue})" : $"{initialValue}";
                     initialConditions.Add($"y{i}(0)={formattedInitialValue}");
 
-                    // Случайное целое число для уравнений
-                    int equationValue = random.Next(-1000, 1000);
-                    string formattedEquationValue = equationValue < 0 ? $"({equationValue})" : $"{equationValue}";
-                    equations.Add($"y'{i}={formattedEquationValue}");
+                    // Генерация случайного уравнения
+                    int coefficient1 = random.Next(-10, 10);
+                    int coefficient2 = random.Next(-10, 10);
+                    int constant = random.Next(-100, 100);
+
+                    string formattedCoefficient1 = coefficient1 < 0 ? $"({coefficient1})" : $"{coefficient1}";
+                    string formattedCoefficient2 = coefficient2 < 0 ? $"({coefficient2})" : $"{coefficient2}";
+                    string formattedConstant = constant < 0 ? $"({constant})" : $"{constant}";
+
+                    string equation = $"y'{i}={formattedCoefficient1}*sin(t)+{formattedCoefficient2}*cos(t)+{formattedConstant}";
+                    equations.Add(equation);
                 }
 
                 // Объединение начальных условий и уравнений
@@ -63,18 +70,13 @@ namespace DifferentialEquationSolver
                 initialConditionsBox.Text = initialConditionsString;
                 equationsBox.Text = equationsString;
 
-                MessageBox.Show("Случайные уравнения и начальные условия успешно сгенерированы!", "Генерация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Случайные уравнения и начальные условия успешно сгенерированы! Вы можете их редактировать.", "Генерация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 UIManager.ShowError("Произошла ошибка при генерации уравнений: " + ex.Message);
             }
         }
-
-
-
-
-
 
 
         // Метод проверки корректности начальных условий
